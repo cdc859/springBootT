@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.cdc.dao.RunoobTblDao" >
+ 	
+ 	<resultMap type="com.cdc.dto.RunoobTblDto" id="runoobTblResultMap">
+			<result property="runoobId" column="runoob_id" jdbcType="INTEGER" />
+			<result property="runoobTitle" column="runoob_title" jdbcType="VARCHAR" />
+			<result property="runoobAuthor" column="runoob_author" jdbcType="VARCHAR" />
+			<result property="submissionDate" column="submission_date" jdbcType="DATE" />
+ 	</resultMap>
+ 	
+ 	<insert id="insertRunoobTblDto" parameterType="com.cdc.dto.RunoobTblDto">       
+     	INSERT INTO runoob_tbl (
+     		runoob_id,runoob_title,runoob_author,submission_date
+     	) VALUES (#{runoobId, jdbcType=INTEGER},#{runoobTitle, jdbcType=VARCHAR},#{runoobAuthor, jdbcType=VARCHAR},#{submissionDate, jdbcType=DATE})
+   </insert>
+   
+    <insert id="batchInsertRunoobTblDto" parameterType="java.util.List">
+             INSERT INTO runoob_tbl (runoob_id,runoob_title,runoob_author,submission_date) 
+             <foreach collection="list" item="item" index="index" separator="union all">
+				select #{item.runoobId, jdbcType=INTEGER},#{item.runoobTitle, jdbcType=VARCHAR},#{item.runoobAuthor, jdbcType=VARCHAR},#{item.submissionDate, jdbcType=DATE} from dual
+			</foreach>
+    </insert>   
+   
+   <sql id="runoobTbl_Where_Clause"> 
+   		<trim prefix=" WHERE  " prefixOverrides="AND">
+   		    	        <if test="runoobId!=null and runoobId!='' ">
+   		    	        	AND runoob_id=#{runoobId , jdbcType=INTEGER} 
+						</if>
+   		    	        <if test="runoobTitle!=null and runoobTitle!='' ">
+   		    	        	AND runoob_title=#{runoobTitle , jdbcType=VARCHAR} 
+						</if>
+   		    	        <if test="runoobAuthor!=null and runoobAuthor!='' ">
+   		    	        	AND runoob_author=#{runoobAuthor , jdbcType=VARCHAR} 
+						</if>
+   		    	        <if test="submissionDate!=null and submissionDate!='' ">
+   		    	        	AND submission_date=#{submissionDate , jdbcType=DATE} 
+						</if>
+   		 </trim>   
+   </sql>
+   
+   <update id="updateRunoobTblByPk" parameterType="com.cdc.dto.RunoobTblDto" >  	
+   		UPDATE runoob_tbl 
+   			SET
+   			<trim suffix=" " suffixOverrides=","> 
+   		    	        <if test="runoobTitle!=null and runoobTitle!='' ">
+   		    	        	runoob_title=#{runoobTitle , jdbcType=VARCHAR},
+						</if>
+   		    	        <if test="runoobAuthor!=null and runoobAuthor!='' ">
+   		    	        	runoob_author=#{runoobAuthor , jdbcType=VARCHAR},
+						</if>
+   		    	        <if test="submissionDate!=null and submissionDate!='' ">
+   		    	        	submission_date=#{submissionDate , jdbcType=DATE},
+						</if>
+   		    </trim>
+   		WHERE 
+   		    runoob_id=#{runoobId, jdbcType=INTEGER} 
+   </update>
+   
+   <select id="selectRunoobTblByPk" parameterType="com.cdc.dto.RunoobTblDto" resultMap="runoobTblResultMap">
+   		SELECT runoob_id,runoob_title,runoob_author,submission_date FROM  runoob_tbl WHERE   runoob_id=#{runoobId, jdbcType=INTEGER}
+   </select>
+   
+   <select id="selectRunoobTblByDto" parameterType="com.cdc.dto.RunoobTblDto" resultMap="runoobTblResultMap">
+   		SELECT runoob_id,runoob_title,runoob_author,submission_date FROM  runoob_tbl 
+   		 <include refid="runoobTbl_Where_Clause" />
+   </select>
+   
+   <select id="selectRunoobTblByDtoPage" parameterType="com.cdc.dto.RunoobTblDto" resultMap="runoobTblResultMap">
+   		SELECT runoob_id,runoob_title,runoob_author,submission_date FROM  runoob_tbl    
+   		 <include refid="runoobTbl_Where_Clause" />
+   </select>
+   
+   <delete id="deleteRunoobTblByPk" parameterType="com.cdc.dto.RunoobTblDto">
+   		DELETE FROM runoob_tbl WHERE runoob_id=#{runoobId, jdbcType=INTEGER}
+   </delete>
+ 	
+</mapper>

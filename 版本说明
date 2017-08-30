@@ -1,0 +1,7 @@
+V1.0
+	1、springBoot 基础搭建
+	2、main启动与容器启动配置
+	3、redis与mysql配置
+	4、mybatis配置
+	5、logback日志配置
+	6、dao与mapper设置

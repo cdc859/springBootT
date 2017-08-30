@@ -1,0 +1,42 @@
+<!-- 分页查询信息 -->
+	 <select id="selectRemotePostInfoPage" resultType="com.fcbox.manage.core.entity.FcboxPostClientMobile" parameterType="com.fcbox.manage.core.entity.FcboxPostClientMobilePage" >
+	    
+	    <include refid="OracleDialectPrefix" />
+	    
+	   		select t.CLIENT_MOBILE as clientMobile,
+				t.id as ID,
+				t.EXPRESSID as expressid,
+				t.EXPRESS_COMPANY_ID as expressCompanyId,
+				t.CREATE_TM as createTm,
+				t.CREATE_EMP as createEmp,
+				t.EXPRESS_TYPE as expressType,
+				t.EXPRESS_FEE as expressFee,
+				t.BOX_TYPE as boxType,
+				t.CREATE_EMP_UIC as createEmpUic,
+				t.STATUS as status
+			from FCBOX_POST_CLIENT_MOBILE t where 
+				t.CREATE_EMP_UIC=#{createEmpUic,jdbcType = NUMERIC}
+				order by t.CREATE_TM desc
+	    <include refid="OracleDialectSuffix" />
+	    
+	  </select>
+	
+	<!-- 分页总数 -->  
+ 	<select id="countRemotePostInfo" parameterType="com.fcbox.manage.core.entity.FcboxPostClientMobilePage" resultType="java.lang.Integer" >
+    	select count(*) from FCBOX_POST_CLIENT_MOBILE t where 
+				t.CREATE_EMP_UIC=#{createEmpUic,jdbcType = NUMERIC}
+  	</select>
+	
+	 <!-- 分页头 -->
+	 <sql id="OracleDialectPrefix" >
+	    <if test="page != null" >
+	      select * from ( select row_.*, rownum rownum_ from ( 
+	    </if>
+	  </sql>
+	  
+	  <!-- 分页尾 -->
+	  <sql id="OracleDialectSuffix" >
+	    <if test="page != null" >
+	       ) row_ ) where rownum_ &gt; #{page.begin} and rownum_ &lt;= #{page.end}
+	    </if>
+	  </sql>
